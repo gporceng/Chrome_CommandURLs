@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Command Navigation",
+  "version": "1.0",
+  "permissions": ["activeTab","storage","omnibox"],
+  "omnibox": {
+        "keyword": "go"
+   },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "commands": {
+    "open-url": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+U"
+      },
+      "description": "Open a predefined URL"
+    }
+  }
+}

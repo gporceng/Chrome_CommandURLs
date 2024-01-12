@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Command Navigation</title>
+    <link rel="stylesheet" type="text/css" href="popup.css">
+</head>
+<body>
+    <h1>Custom URL Commands</h1>
+    <select id="commandsDropdown">
+        <option value="">Select a command...</option>
+        <!-- Options will be dynamically loaded here -->
+    </select>
+
+    <form id="commandForm">
+        <input type="text" id="commandName" placeholder="Enter command name" required>
+        <input type="url" id="commandUrl" placeholder="Enter URL" required>
+        <button type="submit">Save Command</button>
+    </form>
+
+    <button id="deleteCommand" style="background-color: red; color: white;">Delete Command</button>
+
+    <script src="popup.js"></script>
+</body>
+</html>
