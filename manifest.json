@@ -2,10 +2,7 @@
   "manifest_version": 3,
   "name": "Command Navigation",
   "version": "1.0",
-  "permissions": ["activeTab","storage","omnibox"],
-  "omnibox": {
-        "keyword": "go"
-   },
+  "permissions": ["activeTab", "storage", "tabs"],
   "background": {
     "service_worker": "background.js"
   },
@@ -19,5 +16,8 @@
       },
       "description": "Open a predefined URL"
     }
+  },
+  "omnibox": {
+    "keyword": "go"
   }
 }

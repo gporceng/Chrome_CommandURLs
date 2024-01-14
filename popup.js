@@ -1,13 +1,41 @@
+// Function to validate URLs
+function isValidUrl(url) {
+    try {
+        new URL(url);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
 // Function to save a command with multiple URLs
 function saveCommand(name, urlStr) {
-    // Convert the string to an array of URLs
-    let urls = urlStr.startsWith('[') ? JSON.parse(urlStr) : [urlStr];
+    try {
+        // Convert the string to an array of URLs
+        let urls = JSON.parse(urlStr);
 
-    chrome.storage.sync.set({ [name]: urls }, function() {
-        console.log('Command saved', name, urls);
-        loadCommands(); // Refresh the list of commands
-    });
+        // Check if urls is an array, if not make it an array
+        if (!Array.isArray(urls)) {
+            urls = [urls];
+        }
+
+        // Validate each URL in the array
+        if (urls.some(url => !isValidUrl(url))) {
+            alert('One or more URLs are invalid. Please enter valid URLs.');
+            return;
+        }
+
+        // Save the command with its URLs
+        chrome.storage.sync.set({ [name]: urls }, function() {
+            console.log('Command saved:', name, urls);
+            loadCommands(); // Refresh the list of commands
+        });
+    } catch (error) {
+        alert('Error parsing URL string. Ensure it is in a valid array format.');
+        console.error('Error parsing URL string:', error);
+    }
 }
+
 
 // Function to load and display all commands
 function loadCommands() {
@@ -24,25 +52,22 @@ function loadCommands() {
     });
 }
 
-
-
 // Load commands when the popup is opened
 document.addEventListener('DOMContentLoaded', loadCommands);
-
 
 // Event listener for the form submission
 document.getElementById('commandForm').addEventListener('submit', function(e) {
     e.preventDefault();
-    const name = document.getElementById('commandName').value;
-    const url = document.getElementById('commandUrl').value;
+    const name = document.getElementById('commandName').value.trim();
+    const url = document.getElementById('commandUrl').value.trim();
 
     if (name && url) {
         saveCommand(name, url);
+    } else {
+        console.log('Please enter both a name and a URL.');
+
     }
 });
-
-// Load commands when the popup is opened
-document.addEventListener('DOMContentLoaded', loadCommands);
 
 // Event listener for command selection
 document.getElementById('commandsDropdown').addEventListener('change', function(e) {
@@ -65,6 +90,7 @@ document.getElementById('deleteCommand').addEventListener('click', function() {
             loadCommands();
             document.getElementById('commandName').value = '';
             document.getElementById('commandUrl').value = '';
+            console.log('Command deleted:', commandToDelete);
         });
     }
 });
